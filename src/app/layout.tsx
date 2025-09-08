@@ -15,7 +15,7 @@ const fredoka = Fredoka({
 })
 
 export const metadata: Metadata = {
-  title: "Ecoground - Gamified Environmental Learning",
+  title: "Bioblitz - Gamified Environmental Learning",
   description: "Learn to save our planet through interactive challenges and gamified education",
 }
 
