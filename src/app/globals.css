@@ -1,26 +1,227 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Updated to nature-inspired color palette with greens and earth tones */
+  --background: oklch(0.99 0.01 120); /* Soft mint white background */
+  --foreground: oklch(0.25 0.02 140); /* Deep forest green for text */
+  --card: oklch(0.98 0.02 130); /* Light sage for cards */
+  --card-foreground: oklch(0.25 0.02 140); /* Deep forest green text on cards */
+  --popover: oklch(0.99 0.01 120); /* Soft mint popover background */
+  --popover-foreground: oklch(0.25 0.02 140); /* Deep forest green popover text */
+  --primary: oklch(0.55 0.15 140); /* Forest green primary color */
+  --primary-foreground: oklch(0.98 0.02 130); /* Light sage text on primary */
+  --secondary: oklch(0.45 0.12 160); /* Teal secondary */
+  --secondary-foreground: oklch(0.98 0.02 130); /* Light sage text on secondary */
+  --muted: oklch(0.96 0.02 130); /* Very light sage for muted elements */
+  --muted-foreground: oklch(0.45 0.02 140); /* Medium forest green text */
+  --accent: oklch(0.65 0.18 80); /* Warm earth brown accent */
+  --accent-foreground: oklch(0.98 0.02 130); /* Light sage text on accent */
+  --destructive: oklch(0.55 0.25 25); /* Red for destructive actions */
+  --destructive-foreground: oklch(1 0 0); /* White text on destructive */
+  --border: oklch(0.88 0.02 130); /* Light sage borders */
+  --input: oklch(0.96 0.02 130); /* Very light sage input background */
+  --ring: oklch(0.55 0.15 140 / 0.5); /* Forest green ring with transparency */
+  --chart-1: oklch(0.55 0.15 140); /* Forest green for charts */
+  --chart-2: oklch(0.45 0.12 160); /* Teal for charts */
+  --chart-3: oklch(0.65 0.18 80); /* Earth brown for charts */
+  --chart-4: oklch(0.6 0.2 200); /* Sky blue accent */
+  --chart-5: oklch(0.7 0.15 90); /* Warm yellow-green */
+  --radius: 0.5rem; /* Rounded corners */
+  --sidebar: oklch(0.99 0.01 120); /* Soft mint sidebar */
+  --sidebar-foreground: oklch(0.25 0.02 140); /* Deep forest green sidebar text */
+  --sidebar-primary: oklch(0.96 0.02 130); /* Very light sage sidebar primary */
+  --sidebar-primary-foreground: oklch(0.25 0.02 140); /* Deep forest green on sidebar primary */
+  --sidebar-accent: oklch(0.65 0.18 80); /* Earth brown sidebar accent */
+  --sidebar-accent-foreground: oklch(0.98 0.02 130); /* Light sage on sidebar accent */
+  --sidebar-border: oklch(0.88 0.02 130); /* Light sage sidebar borders */
+  --sidebar-ring: oklch(0.55 0.15 140 / 0.5); /* Forest green sidebar ring */
+}
+
+.dark {
+  /* Updated dark mode with nature-inspired colors */
+  --background: oklch(0.12 0.02 140); /* Deep forest background */
+  --foreground: oklch(0.92 0.02 130); /* Light sage text */
+  --card: oklch(0.18 0.02 140); /* Darker forest card background */
+  --card-foreground: oklch(0.92 0.02 130); /* Light sage card text */
+  --popover: oklch(0.12 0.02 140); /* Deep forest popover */
+  --popover-foreground: oklch(0.92 0.02 130); /* Light sage popover text */
+  --primary: oklch(0.65 0.18 140); /* Brighter forest green for dark mode */
+  --primary-foreground: oklch(0.12 0.02 140); /* Deep forest text on primary */
+  --secondary: oklch(0.55 0.15 160); /* Brighter teal for dark mode */
+  --secondary-foreground: oklch(0.12 0.02 140); /* Deep forest text on secondary */
+  --muted: oklch(0.22 0.02 140); /* Dark forest muted background */
+  --muted-foreground: oklch(0.7 0.02 130); /* Medium sage muted text */
+  --accent: oklch(0.75 0.2 80); /* Bright earth brown accent */
+  --accent-foreground: oklch(0.12 0.02 140); /* Deep forest text on accent */
+  --destructive: oklch(0.6 0.3 25); /* Brighter red for dark mode */
+  --destructive-foreground: oklch(0.92 0.02 130); /* Light sage text on destructive */
+  --border: oklch(0.28 0.02 140); /* Dark forest borders */
+  --input: oklch(0.22 0.02 140); /* Dark forest input background */
+  --ring: oklch(0.65 0.18 140 / 0.5); /* Bright forest green ring */
+  --chart-1: oklch(0.65 0.18 140); /* Bright forest green for charts */
+  --chart-2: oklch(0.55 0.15 160); /* Bright teal */
+  --chart-3: oklch(0.75 0.2 80); /* Bright earth brown */
+  --chart-4: oklch(0.7 0.22 200); /* Bright sky blue */
+  --chart-5: oklch(0.8 0.18 90); /* Bright yellow-green */
+  --sidebar: oklch(0.15 0.02 140); /* Slightly lighter deep forest sidebar */
+  --sidebar-foreground: oklch(0.92 0.02 130); /* Light sage sidebar text */
+  --sidebar-primary: oklch(0.65 0.18 140); /* Forest green sidebar primary */
+  --sidebar-primary-foreground: oklch(0.12 0.02 140); /* Deep forest text on sidebar primary */
+  --sidebar-accent: oklch(0.22 0.02 140); /* Dark forest sidebar accent */
+  --sidebar-accent-foreground: oklch(0.92 0.02 130); /* Light sage text on sidebar accent */
+  --sidebar-border: oklch(0.28 0.02 140); /* Dark forest sidebar borders */
+  --sidebar-ring: oklch(0.65 0.18 140 / 0.5); /* Bright forest green sidebar ring */
 }
 
 @theme inline {
+  /* Updated font configuration to use Inter and Fredoka for gamified feel */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+  --font-game: var(--font-fredoka); /* Added gamified font variable */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Added gamified font utility classes */
+@layer utilities {
+  .font-game {
+    font-family: var(--font-fredoka), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .text-game {
+    font-family: var(--font-fredoka), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+  }
+
+  .blur-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .blur-orb-1 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, oklch(0.8 0.15 200) 0%, transparent 70%);
+    top: 10%;
+    left: 5%;
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .blur-orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, oklch(0.75 0.12 180) 0%, transparent 70%);
+    top: 60%;
+    right: 10%;
+    animation: float 25s ease-in-out infinite reverse;
+  }
+
+  .blur-orb-3 {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, oklch(0.85 0.1 210) 0%, transparent 70%);
+    top: 30%;
+    right: 30%;
+    animation: float 30s ease-in-out infinite;
+  }
+
+  /* Added gamification-specific animations and effects */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse-glow {
+    from {
+      box-shadow: 0 0 5px oklch(0.65 0.18 140 / 0.5);
+    }
+    to {
+      box-shadow: 0 0 20px oklch(0.65 0.18 140 / 0.8), 0 0 30px oklch(0.65 0.18 140 / 0.4);
+    }
+  }
+
+  .bounce-subtle {
+    animation: bounce-subtle 0.6s ease-in-out;
+  }
+
+  @keyframes bounce-subtle {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) translateX(0px);
+    }
+    25% {
+      transform: translateY(-20px) translateX(10px);
+    }
+    50% {
+      transform: translateY(-10px) translateX(-15px);
+    }
+    75% {
+      transform: translateY(-30px) translateX(5px);
+    }
+  }
 }
