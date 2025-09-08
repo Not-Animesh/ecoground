@@ -1,24 +1,25 @@
 "use client"
 
-import { useState } from "react"
-import { Sidebar } from "@/components/sidebar"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ShoppingBag, Coins, Heart, Palette, ImageIcon, Sparkles, Lock, Check, Star } from "lucide-react"
+import { useState } from "react";
+import { Sidebar } from "@/components/sidebar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ShoppingBag, Coins, Heart, Palette, ImageIcon, Sparkles, Lock, Check, Star } from "lucide-react";
+import Image from "next/image";
 
 export default function ShopPage() {
-  const [userPoints] = useState(1250)
-  const [userOrbs] = useState(45)
-  const [ownedItems, setOwnedItems] = useState<number[]>([1, 5, 9])
+  const [userPoints] = useState(1250);
+  const [userOrbs] = useState(45);
+  const [ownedItems, setOwnedItems] = useState<number[]>([1, 5, 9]);
 
   const shopCategories = [
     { id: "avatars", label: "Avatars", icon: ImageIcon },
     { id: "banners", label: "Banners", icon: Palette },
     { id: "badges", label: "Badges", icon: Star },
     { id: "themes", label: "Themes", icon: Sparkles },
-  ]
+  ];
 
   const shopItems = {
     avatars: [
@@ -29,7 +30,7 @@ export default function ShopPage() {
         price: 200,
         currency: "points",
         rarity: "common",
-        image: "/eco-warrior-avatar.jpg",
+        image: "/i1.png",
       },
       {
         id: 2,
@@ -38,7 +39,7 @@ export default function ShopPage() {
         price: 500,
         currency: "points",
         rarity: "rare",
-        image: "/forest-guardian-avatar.jpg",
+        image: "/i2.png"  ,
       },
       {
         id: 3,
@@ -47,7 +48,7 @@ export default function ShopPage() {
         price: 15,
         currency: "orbs",
         rarity: "epic",
-        image: "/ocean-keeper-avatar.jpg",
+        image: "/i5.jpg",
       },
       {
         id: 4,
@@ -56,7 +57,7 @@ export default function ShopPage() {
         price: 25,
         currency: "orbs",
         rarity: "legendary",
-        image: "/solar-champion-avatar.jpg",
+        image: "/i4.jpg",
       },
     ],
     banners: [
@@ -137,37 +138,37 @@ export default function ShopPage() {
         image: "/forest-canopy-theme.jpg",
       },
     ],
-  }
+  };
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case "common":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
       case "rare":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
       case "epic":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300";
       case "legendary":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
     }
-  }
+  };
 
   const canAfford = (price: number, currency: string) => {
-    return currency === "points" ? userPoints >= price : userOrbs >= price
-  }
+    return currency === "points" ? userPoints >= price : userOrbs >= price;
+  };
 
   const isOwned = (itemId: number) => {
-    return ownedItems.includes(itemId)
-  }
+    return ownedItems.includes(itemId);
+  };
 
   const handlePurchase = (itemId: number, price: number, currency: string) => {
     if (canAfford(price, currency) && !isOwned(itemId)) {
-      setOwnedItems([...ownedItems, itemId])
+      setOwnedItems([...ownedItems, itemId]);
       // In a real app, you'd update the user's currency here
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -202,13 +203,13 @@ export default function ShopPage() {
         <Tabs defaultValue="avatars" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
             {shopCategories.map((category) => {
-              const Icon = category.icon
+              const Icon = category.icon;
               return (
                 <TabsTrigger key={category.id} value={category.id} className="flex items-center gap-2">
                   <Icon className="w-4 h-4" />
                   {category.label}
                 </TabsTrigger>
-              )
+              );
             })}
           </TabsList>
 
@@ -221,11 +222,14 @@ export default function ShopPage() {
                     className="group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20"
                   >
                     <CardHeader className="pb-3">
-                      <div className="aspect-square bg-muted rounded-lg mb-3 overflow-hidden">
-                        <img
+                      <div className="aspect-square bg-muted rounded-lg mb-3 overflow-hidden flex items-center justify-center">
+                        {/* Use next/image for local images */}
+                        <Image
                           src={item.image || "/placeholder.svg"}
                           alt={item.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          width={256}
+                          height={256}
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 rounded-lg"
                         />
                       </div>
                       <div className="flex items-start justify-between">
@@ -289,5 +293,5 @@ export default function ShopPage() {
         </Tabs>
       </main>
     </div>
-  )
+  );
 }

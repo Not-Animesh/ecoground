@@ -60,9 +60,8 @@ export default function ProfilePage() {
     { id: "tree-keeper", name: "Tree Keeper", emoji: "🌳", unlocked: true },
     { id: "ocean-protector", name: "Ocean Protector", emoji: "🌊", unlocked: false },
     { id: "solar-champion", name: "Solar Champion", emoji: "☀️", unlocked: true },
-    { id: "earth-defender", name: "Earth Defender", emoji: "🌍", unlocked: false, image: "/earth-defender.png" },
-    { id: "nature-sage", name: "Nature Sage", emoji: "🦉", unlocked: false },
-    { id: "eco-avatar-img", name: "Eco Icon", emoji: "", unlocked: true, image: "/eco-avatar-img.png" },
+    { id: "earth-defender", name: "Earth Defender", emoji: "🌍", unlocked: false },
+    { id: "nature-sage", name: "Nature Sage", emoji: "🦉", unlocked: false }
   ];
 
   // === Banners ===
