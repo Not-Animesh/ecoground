@@ -225,3 +225,66 @@
     }
   }
 }
+/* Custom animations and effects */
+.blur-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.blur-orb-1 {
+  top: 10%;
+  left: 10%;
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  animation: float 6s ease-in-out infinite;
+}
+
+.blur-orb-2 {
+  top: 60%;
+  right: 10%;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(45deg, #06b6d4, #10b981);
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+.blur-orb-3 {
+  bottom: 10%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  background: linear-gradient(45deg, #f59e0b, #ef4444);
+  animation: float 7s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+  to { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+}
+
+.bounce-subtle {
+  animation: bounce-subtle 0.3s ease-in-out;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.font-game {
+  font-family: 'Inter', 'system-ui', sans-serif;
+  font-weight: 600;
+}

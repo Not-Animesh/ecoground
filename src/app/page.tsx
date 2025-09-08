@@ -1,280 +1,229 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { Trophy, Target, Globe, Coins, Heart, Flame, CheckCircle, Lock, Play } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Sidebar } from "@/components/sidebar"
-import { useGameStore } from "@/components/gamification-store"
+import Link from "next/link";
+import Image from "next/image";
 
-export default function EcogroundDashboard() {
-  const {
-    ecoPoints,
-    lifeOrbs,
-    currentStreak,
-    globalRank,
-    level,
-    completedModules,
-    completedChallenges,
-    updateStreak,
-    completeChallenge,
-    completeModule,
-  } = useGameStore()
-
-  useEffect(() => {
-    updateStreak()
-  }, [updateStreak])
-
-  const modules = [
+export default function LandingPage() {
+  // About BioBlitz points
+  const aboutPoints = [
     {
-      id: "climate-basics",
-      name: "Climate Basics",
-      unlocked: true,
-      completed: completedModules.includes("climate-basics"),
+      title: "🌱 Eco Learning, Gamified",
+      desc: "BioBlitz turns environmental education into an interactive adventure. Quizzes, games, and daily eco challenges make learning fun and impactful.",
+      gradient: "from-green-200 via-green-300 to-green-100",
     },
     {
-      id: "water-conservation",
-      name: "Water Conservation",
-      unlocked: completedModules.includes("climate-basics"),
-      completed: completedModules.includes("water-conservation"),
+      title: "🤝 Community & Collaboration",
+      desc: "Join a vibrant network of eco-warriors, compete on leaderboards, and collaborate on green missions. Together, we change the world—one habit at a time.",
+      gradient: "from-blue-200 via-blue-300 to-blue-100",
     },
     {
-      id: "biodiversity",
-      name: "Biodiversity",
-      unlocked: completedModules.includes("water-conservation"),
-      completed: completedModules.includes("biodiversity"),
+      title: "🌍 Real-World Impact",
+      desc: "Track real habits, earn rewards, and see your progress both in the app and in your life. Every action helps create a healthier planet.",
+      gradient: "from-yellow-200 via-green-200 to-blue-100",
+    },
+  ];
+
+  // Unique selling features
+  const uniqueFeatures = [
+    {
+      emoji: "🎮",
+      title: "Play & Progress",
+      desc: "Level up by completing eco-friendly tasks, unlock badges and avatar upgrades, and make every day an achievement.",
+      gradient: "from-blue-50 to-green-100",
     },
     {
-      id: "waste-management",
-      name: "Waste Management",
-      unlocked: completedModules.includes("biodiversity"),
-      completed: completedModules.includes("waste-management"),
+      emoji: "📊",
+      title: "Habit Tracker",
+      desc: "A simple, beautiful tracker for everyday green actions—see your streaks, join challenges, and never lose your eco momentum.",
+      gradient: "from-green-50 to-blue-100",
     },
-  ]
-
-  const challenges = [
-    { id: "plastic-free-week", name: "Plastic-Free Week", progress: 4, total: 7, points: 50, active: true },
-    { id: "energy-audit", name: "Energy Audit", progress: 0, total: 1, points: 75, active: false },
-    { id: "bike-to-school", name: "Bike to School", progress: 2, total: 5, points: 30, active: true },
-  ]
-
-  const leaderboard = [
-    { name: "Alex Smith", points: 1250, avatar: "/diverse-students-studying.png", rank: 1 },
-    { name: "Maya Johnson", points: 1180, avatar: "/diverse-students-studying.png", rank: 2 },
-    { name: "Luis Chen", points: 1050, avatar: "/diverse-students-studying.png", rank: 3 },
-    { name: "You (EcoWarrior)", points: ecoPoints, avatar: "/diverse-group-studying.png", rank: globalRank },
-  ]
+    {
+      emoji: "🏆",
+      title: "Eco Leaderboard",
+      desc: "Compete with friends, climb the ranks, and celebrate planet-saving progress together in a supportive global community.",
+      gradient: "from-yellow-50 to-green-100",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden flex">
-      <div className="blur-orb blur-orb-1"></div>
-      <div className="blur-orb blur-orb-2"></div>
-      <div className="blur-orb blur-orb-3"></div>
+    <div className="relative min-h-screen bg-white text-gray-900 font-sans overflow-x-hidden">
+      {/* Background Blur Effects */}
+      <div className="absolute top-[-120px] left-[-120px] w-[350px] h-[350px] bg-green-400 rounded-full blur-[120px] opacity-30 z-0"></div>
+      <div className="absolute top-[360px] right-[-100px] w-[300px] h-[300px] bg-blue-400 rounded-full blur-[100px] opacity-30 z-0"></div>
+      <div className="absolute bottom-[-120px] left-[60%] w-[220px] h-[220px] bg-green-300 rounded-full blur-[80px] opacity-30 z-0"></div>
+      <div className="absolute bottom-[-110px] right-[10%] w-[190px] h-[190px] bg-blue-300 rounded-full blur-[80px] opacity-30 z-0"></div>
 
-      <Sidebar currentPage="dashboard" />
+      {/* Navbar */}
+      <nav className="w-full px-8 py-4 flex items-center justify-between bg-white/80 fixed top-0 left-0 z-30 shadow backdrop-blur-lg">
+        <div className="flex items-center gap-3">
+          <Image src="/favicon.jpg" alt="BioBlitz Logo" width={36} height={36} className="rounded-lg" />
+          <span className="font-bold text-xl tracking-wide text-green-700">BioBlitz</span>
+        </div>
+        <ul className="flex gap-8 text-base font-medium">
+          <li>
+            <a href="#about" className="hover:text-green-600 transition-colors">About</a>
+          </li>
+          <li>
+            <a href="#feature" className="hover:text-blue-600 transition-colors">Feature</a>
+          </li>
+          <li>
+            <a href="#course" className="hover:text-green-600 transition-colors">Course</a>
+          </li>
+        </ul>
+        <div>
+          <Link href="/dashboard">
+            <button className="bg-green-500 text-white font-bold py-2 px-5 rounded-full shadow hover:bg-green-600 transition">
+              Log In
+            </button>
+          </Link>
+        </div>
+      </nav>
 
-      <main className="flex-1 p-6 overflow-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-game text-foreground mb-2">
-            Welcome back, <span className="text-primary">EcoWarrior!</span>
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 flex flex-col-reverse lg:flex-row items-center justify-between max-w-7xl mx-auto px-6 relative z-10">
+        <div className="flex-1 flex flex-col gap-8">
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-2 text-green-700 drop-shadow-lg">
+            Transform Playtime into Learning
           </h1>
-          <p className="text-muted-foreground">Ready to save the planet today? Let's check your progress!</p>
+          <p className="text-lg text-gray-600 max-w-md mb-4">
+            Join BioBlitz—where gamified environmental learning meets real-world impact. Learn, play, and grow alongside thousands of eco-warriors committed to making a difference.
+          </p>
+          <Link href="/dashboard">
+            <button className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow hover:bg-blue-600 transition text-lg">
+              Get Started &gt;
+            </button>
+          </Link>
         </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="pulse-glow">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center space-x-2 text-sm font-medium">
-                <Coins className="w-4 h-4 text-accent" />
-                <span>Eco-Points</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-game text-foreground">{ecoPoints.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">For leaderboard ranking</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center space-x-2 text-sm font-medium">
-                <Heart className="w-4 h-4 text-destructive" />
-                <span>Life-Orbs</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-game text-foreground">{lifeOrbs}</div>
-              <p className="text-xs text-muted-foreground">Shop currency</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center space-x-2 text-sm font-medium">
-                <Flame className="w-4 h-4 text-primary" />
-                <span>Current Streak</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-game text-foreground">{currentStreak} days</div>
-              <p className="text-xs text-muted-foreground">Keep it going!</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center space-x-2 text-sm font-medium">
-                <Trophy className="w-4 h-4 text-accent" />
-                <span>Global Rank</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-game text-foreground">#{globalRank}</div>
-              <p className="text-xs text-muted-foreground">This week</p>
-            </CardContent>
-          </Card>
+        <div className="flex-1 flex flex-col items-center lg:items-end mb-10 lg:mb-0">
+          <Image
+            src="/img1.png"
+            alt="BioBlitz Hero"
+            width={608}
+            height={331}
+            className="rounded-3xl shadow-lg border-4 border-blue-400 object-cover"
+            priority
+          />
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Progression Map */}
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-game">
-                <Globe className="w-5 h-5 text-primary" />
-                <span>Learning Path</span>
-              </CardTitle>
-              <CardDescription>Your journey through environmental education</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {modules.map((module, index) => (
-                  <div key={module.id} className="flex items-center space-x-4 p-4 rounded-lg border bg-card/50">
-                    <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        module.completed
-                          ? "bg-primary text-primary-foreground"
-                          : module.unlocked
-                            ? "bg-accent text-accent-foreground"
-                            : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {module.completed ? (
-                        <CheckCircle className="w-6 h-6" />
-                      ) : module.unlocked ? (
-                        <Play className="w-6 h-6" />
-                      ) : (
-                        <Lock className="w-6 h-6" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-game text-foreground">{module.name}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {module.completed ? "Completed!" : module.unlocked ? "Ready to start" : "Locked"}
-                      </p>
-                    </div>
-                    {module.unlocked && !module.completed && (
-                      <Button size="sm" onClick={() => completeModule(module.id)} className="bounce-subtle">
-                        Start
-                      </Button>
-                    )}
-                  </div>
-                ))}
+      {/* About BioBlitz Section */}
+      <section id="about" className="py-12 bg-white/70 relative z-10">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col items-center">
+          <h2 className="text-4xl font-extrabold text-center text-green-700 mb-10">About BioBlitz</h2>
+          <div className="flex flex-col md:flex-row gap-8 w-full justify-center">
+            {aboutPoints.map((point, i) => (
+              <div
+                key={i}
+                className={`flex-1 min-w-[240px] bg-gradient-to-br ${point.gradient} rounded-2xl shadow-lg p-8 flex flex-col items-center justify-center hover:scale-[1.03] transition`}
+              >
+                <h3 className="text-2xl mb-2">{point.title}</h3>
+                <p className="text-gray-700 text-center">{point.desc}</p>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Right Column */}
-          <div className="space-y-6">
-            {/* Daily Challenges */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-game">
-                  <Target className="w-5 h-5 text-accent" />
-                  <span>Daily Challenges</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {challenges.map((challenge) => (
-                  <div key={challenge.id} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-foreground">{challenge.name}</span>
-                      <Badge variant={challenge.active ? "default" : "secondary"} className="text-xs">
-                        +{challenge.points} pts
-                      </Badge>
-                    </div>
-                    <Progress value={(challenge.progress / challenge.total) * 100} className="h-2" />
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>
-                        {challenge.progress}/{challenge.total} completed
-                      </span>
-                      {challenge.active && challenge.progress < challenge.total && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => completeChallenge(challenge.id)}
-                          className="h-6 px-2 text-xs"
-                        >
-                          Complete
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Quick Leaderboard */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-game">
-                  <Trophy className="w-5 h-5 text-primary" />
-                  <span>Top Eco-Warriors</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {leaderboard.slice(0, 4).map((user) => (
-                  <div
-                    key={user.rank}
-                    className={`flex items-center space-x-3 p-2 rounded-lg ${
-                      user.name.includes("You") ? "bg-primary/10" : ""
-                    }`}
-                  >
-                    <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                        user.rank === 1
-                          ? "bg-primary text-primary-foreground"
-                          : user.rank === 2
-                            ? "bg-accent text-accent-foreground"
-                            : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {user.rank}
-                    </div>
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={user.avatar || "/placeholder.svg"} />
-                      <AvatarFallback>
-                        {user.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-foreground truncate">{user.name}</div>
-                      <div className="text-xs text-muted-foreground">{user.points.toLocaleString()} points</div>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+            ))}
           </div>
         </div>
-      </main>
+      </section>
+
+      {/* Feature Section */}
+      <section id="feature" className="py-16 bg-white relative z-10">
+        <h2 className="text-3xl font-extrabold text-center text-blue-700 mb-10">Why Choose BioBlitz?</h2>
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+          {uniqueFeatures.map((f, i) => (
+            <div
+              key={i}
+              className={`flex flex-col items-center text-center gap-6 bg-gradient-to-br ${f.gradient} rounded-2xl py-8 px-4 shadow-lg hover:scale-105 transition`}
+            >
+              <span className="text-4xl mb-2">{f.emoji}</span>
+              <h3 className="text-xl font-bold text-green-800">{f.title}</h3>
+              <p className="text-gray-700 text-md">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Course Section */}
+      <section id="course" className="py-16 bg-white/90 relative z-10">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-green-700 text-center mb-8">Our Courses Help You Improve</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              {
+                title: "Eco Habits",
+                desc: "Daily, weekly, and monthly challenges to build lifelong green habits—customized just for you.",
+                emoji: "🌿",
+                bg: "bg-green-50"
+              },
+              {
+                title: "Knowledge Quests",
+                desc: "Quizzes, guides, and fun facts to supercharge your understanding of sustainability topics.",
+                emoji: "🧠",
+                bg: "bg-blue-50"
+              },
+              {
+                title: "Collaborative Missions",
+                desc: "Team up for bigger goals, unlock group badges, and make community-driven impact.",
+                emoji: "👥",
+                bg: "bg-yellow-50"
+              }
+            ].map((course, i) => (
+              <div key={i} className={`flex flex-col items-center text-center gap-3 ${course.bg} rounded-2xl py-8 px-4 shadow`}>
+                <span className="text-4xl mb-2">{course.emoji}</span>
+                <h4 className="text-lg font-bold text-blue-700">{course.title}</h4>
+                <p className="text-gray-700 text-sm">{course.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-white/80 text-gray-700 py-10 px-6 relative z-10 border-t border-green-100">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <h4 className="font-bold mb-2 text-green-700">Product</h4>
+            <ul className="space-y-1">
+              <li><a href="#" className="hover:underline">iOS App</a></li>
+              <li><a href="#" className="hover:underline">Android App</a></li>
+              <li><a href="#" className="hover:underline">How it Works</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-green-700">Company</h4>
+            <ul className="space-y-1">
+              <li><a href="#" className="hover:underline">Contact Us</a></li>
+              <li><a href="#" className="hover:underline">Blog</a></li>
+              <li><a href="#" className="hover:underline">News</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-green-700">Community</h4>
+            <ul className="space-y-1">
+              <li><a href="#" className="hover:underline">Guidelines</a></li>
+              <li><a href="#" className="hover:underline">Hall of Heroes</a></li>
+              <li><a href="#" className="hover:underline">Translate BioBlitz</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-green-700">Support</h4>
+            <ul className="space-y-1">
+              <li><a href="#" className="hover:underline">FAQ</a></li>
+              <li><a href="#" className="hover:underline">Report a Bug</a></li>
+              <li><a href="#" className="hover:underline">Request a Feature</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-green-100 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <span>© 2025 BioBlitz. All rights reserved.</span>
+          <div className="flex gap-4 mt-4 md:mt-0">
+            <a href="#"><span className="inline-block w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-blue-500 font-bold text-lg">T</span></a>
+            <a href="#"><span className="inline-block w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-blue-500 font-bold text-lg">F</span></a>
+            <a href="#"><span className="inline-block w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-blue-500 font-bold text-lg">I</span></a>
+          </div>
+        </div>
+        <div className="mt-4 text-xs text-gray-400 text-center">
+          Privacy Policy | Terms of Service
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
