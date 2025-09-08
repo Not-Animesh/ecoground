@@ -59,14 +59,10 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn("size-4", className)} {...props} />
-        ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn("size-4", className)} {...props} />
-        ),
-      }}
+      // The following 'components' prop is NOT valid for DayPicker v8+ (react-day-picker)
+      // If you want to customize the navigation icons, use 'classNames' for nav_button or override globally via CSS.
+      // If you use an older version (v7), use the correct prop names (e.g. 'leftIcon', 'rightIcon').
+      // For v8+, you cannot pass 'IconLeft' or 'IconRight'. Remove the components prop:
       {...props}
     />
   );
