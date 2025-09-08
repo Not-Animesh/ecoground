@@ -82,7 +82,7 @@ export default function EcogroundDashboard() {
           <h1 className="text-4xl font-game text-foreground mb-2">
             Welcome back, <span className="text-primary">EcoWarrior!</span>
           </h1>
-          <p className="text-muted-foreground">Ready to save the planet today? Let's check your progress!</p>
+          <p className="text-muted-foreground">Ready to save the planet today? Let&apos;s your progress!</p>
         </div>
 
         {/* Stats Cards */}
