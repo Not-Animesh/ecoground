@@ -85,8 +85,12 @@ export default function ClimateChangeChapterPage() {
       }
       const quizObj = await fetchOneQuiz(seen);
       setQuiz(quizObj);
-    } catch (e: any) {
-      setQuizError(e.message || "Unknown error");
+    } catch (e) {
+      if (e instanceof Error) {
+        setQuizError(e.message);
+      } else {
+        setQuizError("Unknown error");
+      }
     }
     setQuizLoading(false);
   }
@@ -312,6 +316,7 @@ export default function ClimateChangeChapterPage() {
             {uploadPreview && (
               <div className="mb-2">
                 {file && file.type.startsWith("image") ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={uploadPreview}
                     alt="Preview"

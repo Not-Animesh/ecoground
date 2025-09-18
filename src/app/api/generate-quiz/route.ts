@@ -22,7 +22,10 @@ export async function POST(req: NextRequest) {
     }
     // Do NOT return the answerIndex in production if you want to hide it from the client!
     return NextResponse.json({ quiz: question });
-  } catch (error: any) {
-    return NextResponse.json({ error: error?.message || "Unknown error" }, { status: 500 });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: "Unknown error" }, { status: 500 });
   }
 }
