@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -37,6 +38,7 @@ export default function ModulesPage() {
   const modules = [
     {
       id: 1,
+      slug: "climate-change",
       title: "Climate Change Basics",
       description: "Understanding the fundamentals of climate change and its global impact",
       category: "climate",
@@ -52,6 +54,7 @@ export default function ModulesPage() {
     },
     {
       id: 2,
+      slug: "water-cycle",
       title: "Water Cycle & Conservation",
       description: "Learn about the water cycle and effective conservation strategies",
       category: "water",
@@ -67,6 +70,7 @@ export default function ModulesPage() {
     },
     {
       id: 3,
+      slug: "renewable-energy",
       title: "Renewable Energy Systems",
       description: "Explore solar, wind, and other renewable energy technologies",
       category: "renewable",
@@ -82,6 +86,7 @@ export default function ModulesPage() {
     },
     {
       id: 4,
+      slug: "recycling-waste",
       title: "Recycling & Waste Management",
       description: "Master the art of recycling and sustainable waste management",
       category: "recycling",
@@ -97,6 +102,7 @@ export default function ModulesPage() {
     },
     {
       id: 5,
+      slug: "biodiversity-ecosystems",
       title: "Biodiversity & Ecosystems",
       description: "Discover the importance of biodiversity and ecosystem preservation",
       category: "biodiversity",
@@ -178,10 +184,14 @@ export default function ModulesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredModules.map((module) => {
             const Icon = module.icon
-            return (
+
+            // Make card clickable if not locked, and always clickable for details for now
+            const card = (
               <Card
                 key={module.id}
-                className="group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20"
+                className={`group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20 ${
+                  module.status !== "locked" ? "cursor-pointer" : ""
+                }`}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
@@ -241,18 +251,52 @@ export default function ModulesPage() {
                   </div>
 
                   {/* Action Button */}
-                  <Button
-                    className="w-full font-game"
-                    disabled={module.status === "locked"}
-                    variant={module.status === "completed" ? "outline" : "default"}
-                  >
-                    {module.status === "completed" && "Review Module"}
-                    {module.status === "in-progress" && "Continue Learning"}
-                    {module.status === "available" && "Start Module"}
-                    {module.status === "locked" && "Unlock Required"}
-                  </Button>
+                  {module.status === "locked" ? (
+                    <Button
+                      className="w-full font-game"
+                      disabled
+                      variant="secondary"
+                    >
+                      Unlock Required
+                    </Button>
+                  ) : module.slug === "climate-change" ? (
+                    <Link href="/course/climate-change">
+                      <Button
+                        className="w-full font-game"
+                        variant={module.status === "completed" ? "outline" : "default"}
+                      >
+                        {module.status === "completed" && "Review Module"}
+                        {module.status === "in-progress" && "Continue Learning"}
+                        {module.status === "available" && "Start Module"}
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      className="w-full font-game"
+                      variant={module.status === "completed" ? "outline" : "default"}
+                    >
+                      {module.status === "completed" && "Review Module"}
+                      {module.status === "in-progress" && "Continue Learning"}
+                      {module.status === "available" && "Start Module"}
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
+            )
+
+            // Make the entire card clickable for climate change module
+            return module.slug === "climate-change" ? (
+              <Link
+                href="/course/climate-change"
+                key={module.id}
+                className="block h-full"
+                tabIndex={-1}
+                aria-label="View details for Climate Change Basics"
+              >
+                {card}
+              </Link>
+            ) : (
+              <div key={module.id}>{card}</div>
             )
           })}
         </div>

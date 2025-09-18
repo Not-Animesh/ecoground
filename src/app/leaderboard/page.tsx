@@ -173,7 +173,7 @@ export default function LeaderboardPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-2xl font-game flex items-center gap-2">
-                    <Trophy className="w-6 h-6 text-yellow-500" />
+                    <Trophy className="w-6 h-6 text-gray-500" />
                     Global Rankings
                   </CardTitle>
                   <div className="flex gap-2">

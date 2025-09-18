@@ -80,8 +80,18 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 flex flex-col-reverse lg:flex-row items-center justify-between max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex-1 flex flex-col gap-8">
+      <section 
+        className="pt-32 pb-16 flex flex-col-reverse lg:flex-row items-center justify-between max-w-7xl mx-auto px-6 relative z-10"
+        style={{ 
+          backgroundImage: 'url(/Pixelforest.jpg)', 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          borderRadius: '20px', // Optional: adds rounded corners to the hero section
+          padding: '40px', // Optional: adds some internal padding
+          marginTop: '20px', // Optional: separates it from the navbar slightly
+        }}
+      >
+        <div className="flex-1 flex flex-col gap-8 bg-white/80 p-8 rounded-xl shadow-lg"> {/* Added a background to the text for readability */}
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-2 text-green-700 drop-shadow-lg">
             Transform Playtime into Learning
           </h1>

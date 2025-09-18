@@ -14,6 +14,7 @@ import {
   Leaf,
   Coins,
   Heart,
+  Swords,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -30,6 +31,7 @@ export function Sidebar({ currentPage = "dashboard" }: SidebarProps) {
     { id: "profile", icon: User, label: "Profile", href: "/profile" },
     { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
     { id: "modules", icon: BookOpen, label: "Modules", href: "/modules" },
+    { id: "challenge", icon: Swords, label: "Challenge", href: "/challenges" },
     { id: "shop", icon: ShoppingBag, label: "Shop", href: "/shop" },
     { id: "leaderboard", icon: Trophy, label: "Leaderboard", href: "/leaderboard" },
   ]

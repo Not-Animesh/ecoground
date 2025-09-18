@@ -1,4 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@600&display=swap');
 @import "tailwindcss";
+
 
 @custom-variant dark (&:is(.dark *));
 
