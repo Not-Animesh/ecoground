@@ -93,7 +93,7 @@ export default function PlasticFreeWeekPage() {
                   Daily Tracker
                 </CardTitle>
                 <CardDescription>
-                  Check off a day&apos;s task once you've completed it.
+                  Check off a day&apos;s task once you&apos;ve completed it.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
