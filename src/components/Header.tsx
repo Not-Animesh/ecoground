@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
+import Image from 'next/image';
 
-// Import a gamified font via Google Fonts (e.g., 'Press Start 2P', 'Bangers', or 'Luckiest Guy')
-// In your _app.tsx or _document.tsx, add:
-// import '@fontsource/press-start-2p'; // npm install @fontsource/press-start-2p
-// Or include in <head>: <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+// Gamified font classes
+const gamifiedFont = "font-gamified"; // See note below
 
 interface HeaderProps {
   onNavigateToSection?: (sectionId: string) => void;
@@ -20,7 +19,7 @@ export function Header({ onNavigateToSection, onLoginClick }: HeaderProps) {
   const scrollToSection = (sectionId: string) => {
     if (onNavigateToSection) {
       onNavigateToSection(sectionId);
-    } else {
+    } else if (typeof window !== 'undefined') {
       const element = document.getElementById(sectionId);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -36,19 +35,19 @@ export function Header({ onNavigateToSection, onLoginClick }: HeaderProps) {
     { id: 'feature', label: 'FEATURES' },
   ];
 
-  // Gamified font classes
-  const gamifiedFont = "font-gamified"; // See note below
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-b border-black/20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center py-6">
           {/* Logo */}
           <div className="flex items-center">
-            <img
+            <Image
               src="/favicon2.png"
               alt="Bioblitz logo"
+              width={32}
+              height={32}
               className="w-8 h-8 mr-2 rounded-lg border-2 border-black bg-black/5 shadow-sm"
+              priority
             />
             <h1 className={`text-2xl tracking-wider text-black font-bold pl-2 ${gamifiedFont}`}>
               BIOBLITZ
@@ -88,6 +87,7 @@ export function Header({ onNavigateToSection, onLoginClick }: HeaderProps) {
             size="sm"
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </Button>
