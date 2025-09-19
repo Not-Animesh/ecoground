@@ -1,12 +1,15 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions, Session, User as NextAuthUser } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
 
-export const authOptions = {
+// Define the user type if needed, otherwise use NextAuth types.
+type UserRole = "STUDENT" | "TEACHER";
+
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'jwt' as const },
+  session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -15,7 +18,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials || !credentials.email || !credentials.password) {
+        if (!credentials?.email || !credentials?.password) {
           return null;
         }
         const user = await prisma.user.findUnique({ where: { email: credentials.email } });
@@ -26,7 +29,7 @@ export const authOptions = {
           id: user.id,
           name: user.name,
           email: user.email,
-          role: user.role
+          role: user.role as UserRole,
         };
       }
     })
@@ -34,14 +37,14 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user }: { token: any; user?: any }) {
-      if (user) {
+      if (user && user.role) {
         token.role = user.role;
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      if (token && session.user) {
-        session.user.role = token.role;
+    async session({ session, token }: { session: Session; token: Record<string, unknown> }) {
+      if (token?.role && session.user) {
+        (session.user as NextAuthUser & { role?: UserRole }).role = token.role as UserRole;
       }
       return session;
     }

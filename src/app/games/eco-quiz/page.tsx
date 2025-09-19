@@ -136,7 +136,7 @@ export default function VideoQuizGame() {
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-game">Game Over!</CardTitle>
-            <CardDescription>You've completed all the quizzes. Well done!</CardDescription>
+            <CardDescription>You&apos;ve completed all the quizzes. Well done!</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <div className="flex justify-center items-center gap-4">

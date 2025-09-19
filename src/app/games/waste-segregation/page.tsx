@@ -107,7 +107,7 @@ export default function WasteSegregationGame() {
         <Card className="text-center">
           <CardHeader>
             <CardTitle className="text-2xl font-game">Game Over!</CardTitle>
-            <CardDescription>You've completed the sorting challenge.</CardDescription>
+            <CardDescription>You&apos;ve completed the sorting challenge.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-center items-center gap-6">

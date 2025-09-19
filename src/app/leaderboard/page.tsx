@@ -9,8 +9,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Trophy, Medal, Crown, TrendingUp, Users, Flame, Target, Award, Star, Zap } from "lucide-react"
 import { useGameStore } from "@/components/gamification-store"
 
+type Period = "weekly" | "monthly" | "allTime"
+
 export default function LeaderboardPage() {
-  const [selectedPeriod, setSelectedPeriod] = useState("weekly")
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>("weekly")
 
   // Get the current user's stats from global store
   const myEcoPoints = useGameStore((s) => s.ecoPoints)
@@ -21,7 +23,18 @@ export default function LeaderboardPage() {
   const myAvatar = "/diverse-students-studying.png"
 
   // Original leaderboard data (without current user)
-  const leaderboardDataRaw = {
+  const leaderboardDataRaw: Record<Period, {
+    username: string
+    avatar: string
+    ecoPoints: number
+    lifeOrbs: number
+    level: number
+    streak: number
+    badges: string[]
+    trend: string
+    change: string
+    isCurrentUser?: boolean
+  }[]> = {
     weekly: [
       {
         username: "Krishan",
@@ -68,12 +81,8 @@ export default function LeaderboardPage() {
         change: "+156",
       },
     ],
-    monthly: [
-      // ...
-    ],
-    allTime: [
-      // ...
-    ],
+    monthly: [],
+    allTime: [],
   }
 
   // Add the current user to leaderboard for current period
@@ -204,7 +213,7 @@ export default function LeaderboardPage() {
                         key={period}
                         variant={selectedPeriod === period ? "default" : "outline"}
                         size="sm"
-                        onClick={() => setSelectedPeriod(period)}
+                        onClick={() => setSelectedPeriod(period as Period)}
                         className="font-game"
                       >
                         {period === "allTime" ? "All Time" : period.charAt(0).toUpperCase() + period.slice(1)}
