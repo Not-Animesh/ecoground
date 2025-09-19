@@ -64,9 +64,12 @@ export default function ClimateChangeChapterPage() {
   const maxQuiz = 10;
   const [finished, setFinished] = useState(false);
 
-  // Upload state (unchanged)
+  // Upload state for real-life task
   const [file, setFile] = useState<File | null>(null);
   const [uploadPreview, setUploadPreview] = useState<string | null>(null);
+  const [taskNote, setTaskNote] = useState<string>("");
+  const [taskSubmitted, setTaskSubmitted] = useState(false);
+  const [taskSubmitLoading, setTaskSubmitLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Fetch a new quiz question
@@ -120,6 +123,21 @@ export default function ClimateChangeChapterPage() {
       setFile(e.target.files[0]);
       setUploadPreview(URL.createObjectURL(e.target.files[0]));
     }
+  };
+
+  const handleTaskSubmit = async () => {
+    setTaskSubmitLoading(true);
+    // Here you would upload file and note, but for now just fake submit
+    setTimeout(() => {
+      setTaskSubmitLoading(false);
+      setTaskSubmitted(true);
+      setFile(null);
+      setUploadPreview(null);
+      setTaskNote("");
+      // Optionally scroll to notification
+      const taskNotif = document.getElementById("task-notif");
+      if (taskNotif) taskNotif.scrollIntoView({ behavior: "smooth" });
+    }, 1200);
   };
 
   return (
@@ -176,8 +194,16 @@ export default function ClimateChangeChapterPage() {
       {/* Detailed Summary */}
       <div className="mb-6">
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Summary</CardTitle>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="ml-2"
+              onClick={() => alert("AI-generated summary coming soon!")}
+            >
+              AI-summary
+            </Button>
           </CardHeader>
           <CardContent>
             <p className="text-md text-zinc-700 dark:text-zinc-200">
@@ -301,44 +327,66 @@ export default function ClimateChangeChapterPage() {
           <CardHeader>
             <CardTitle>Real-life Task</CardTitle>
             <CardDescription>
-              Complete the activity and upload your proof (photo or video).
+              Complete the activity below and submit your proof (photo or video) with a short note.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="mb-3">{chapter.task}</p>
-            <input
-              type="file"
-              accept="image/*,video/*"
-              ref={fileInputRef}
-              className="mb-3"
-              onChange={handleFileChange}
-            />
-            {uploadPreview && (
-              <div className="mb-2">
-                {file && file.type.startsWith("image") ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={uploadPreview}
-                    alt="Preview"
-                    className="w-full max-h-60 object-contain rounded"
-                  />
-                ) : (
-                  <video
-                    src={uploadPreview}
-                    controls
-                    className="w-full max-h-60 rounded"
-                  />
-                )}
+            <div className="flex flex-col gap-3 mb-2">
+              <label className="font-medium">Upload a photo or video:</label>
+              <input
+                type="file"
+                accept="image/*,video/*"
+                ref={fileInputRef}
+                className="mb-1"
+                onChange={handleFileChange}
+                disabled={taskSubmitLoading || taskSubmitted}
+              />
+              {uploadPreview && (
+                <div className="mb-2">
+                  {file && file.type.startsWith("image") ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={uploadPreview}
+                      alt="Preview"
+                      className="w-full max-h-60 object-contain rounded"
+                    />
+                  ) : (
+                    <video
+                      src={uploadPreview}
+                      controls
+                      className="w-full max-h-60 rounded"
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-3 mb-4">
+              <label htmlFor="task-note" className="font-medium">Add a short note:</label>
+              <textarea
+                id="task-note"
+                value={taskNote}
+                onChange={e => setTaskNote(e.target.value)}
+                className="resize-none rounded border bg-zinc-50 dark:bg-zinc-800 p-2 min-h-[70px]"
+                placeholder="Describe your action or learning…"
+                disabled={taskSubmitLoading || taskSubmitted}
+              />
+            </div>
+            <Button
+              disabled={!file || !taskNote.trim() || taskSubmitLoading || taskSubmitted}
+              onClick={handleTaskSubmit}
+              className="w-full"
+            >
+              {taskSubmitLoading ? "Submitting..." : taskSubmitted ? "Task Submitted" : "Submit"}
+            </Button>
+            {taskSubmitted && (
+              <div
+                id="task-notif"
+                className="mt-4 bg-green-100 border border-green-500 text-green-800 px-4 py-2 rounded text-center font-semibold"
+              >
+                Task submitted and will be verified by a teacher!
               </div>
             )}
-            <Button disabled={!file}>
-              Upload{" "}
-              {file
-                ? file.type.startsWith("image")
-                  ? "Image"
-                  : "Video"
-                : "File"}
-            </Button>
           </CardContent>
         </Card>
       </div>

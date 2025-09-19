@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import {
   User,
@@ -15,10 +16,12 @@ import {
   Coins,
   Heart,
   Swords,
+  Gamepad2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { useGameStore } from "@/components/gamification-store"
 
 interface SidebarProps {
   currentPage?: string
@@ -26,15 +29,33 @@ interface SidebarProps {
 
 export function Sidebar({ currentPage = "dashboard" }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const router = useRouter()
+
+  // Get dynamic values from the store
+  const ecoPoints = useGameStore((state) => state.ecoPoints)
+  const lifeOrbs = useGameStore((state) => state.lifeOrbs)
+  const level = useGameStore((state) => state.level)
+  const equippedAvatar = useGameStore((state) => state.equippedAvatar)
 
   const menuItems = [
     { id: "profile", icon: User, label: "Profile", href: "/profile" },
     { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
     { id: "modules", icon: BookOpen, label: "Modules", href: "/modules" },
     { id: "challenge", icon: Swords, label: "Challenge", href: "/challenges" },
+    { id: "game", icon: Gamepad2, label: "Games", href: "/games" }, 
     { id: "shop", icon: ShoppingBag, label: "Shop", href: "/shop" },
     { id: "leaderboard", icon: Trophy, label: "Leaderboard", href: "/leaderboard" },
   ]
+
+  // Implement your logout logic here (e.g., clear session/cookie, call API, then redirect)
+  const handleLogout = async () => {
+    // Optionally, clear any app state here
+    // await fetch("/api/auth/logout"); // If you have a logout API
+    // Clear localStorage/sessionStorage if needed
+    // localStorage.clear();
+    // Redirect to landing page
+    router.push("/")
+  }
 
   return (
     <div
@@ -95,7 +116,7 @@ export function Sidebar({ currentPage = "dashboard" }: SidebarProps) {
               <span className="text-sm text-sidebar-foreground">Eco-Points</span>
             </div>
             <Badge variant="secondary" className="text-game">
-              1,250
+              {ecoPoints.toLocaleString()}
             </Badge>
           </div>
           <div className="flex items-center justify-between">
@@ -104,7 +125,7 @@ export function Sidebar({ currentPage = "dashboard" }: SidebarProps) {
               <span className="text-sm text-sidebar-foreground">Life-Orbs</span>
             </div>
             <Badge variant="secondary" className="text-game">
-              45
+              {lifeOrbs}
             </Badge>
           </div>
         </div>
@@ -115,15 +136,32 @@ export function Sidebar({ currentPage = "dashboard" }: SidebarProps) {
         <div className="flex items-center space-x-3">
           <Avatar className="w-10 h-10">
             <AvatarImage src="/diverse-students-studying.png" />
-            <AvatarFallback>YU</AvatarFallback>
+            <AvatarFallback>
+              {equippedAvatar
+                ? equippedAvatar
+                    .split(" ")
+                    .map((w) => w[0]?.toUpperCase())
+                    .join("")
+                : "EW"}
+            </AvatarFallback>
           </Avatar>
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-sidebar-foreground truncate">EcoWarrior</div>
-              <div className="text-xs text-sidebar-foreground/70">Level 12</div>
+              <div className="font-medium text-sidebar-foreground truncate">
+                EcoWarrior
+              </div>
+              <div className="text-xs text-sidebar-foreground/70">
+                Level {level}
+              </div>
             </div>
           )}
-          <Button variant="ghost" size="sm" className="text-sidebar-foreground hover:bg-sidebar-accent">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-sidebar-foreground hover:bg-sidebar-accent"
+            onClick={handleLogout}
+            aria-label="Logout"
+          >
             <LogOut className="w-4 h-4" />
           </Button>
         </div>

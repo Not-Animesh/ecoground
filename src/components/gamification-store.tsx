@@ -12,16 +12,25 @@ interface GameState {
   completedModules: string[]
   completedChallenges: string[]
   achievements: string[]
+  unlockedAvatars: string[]
+  equippedAvatar: string
+  unlockedBanners: string[]
+  equippedBanner: string
   lastLoginDate: string
 
   // Actions
   addEcoPoints: (points: number) => void
+  spendEcoPoints: (points: number) => boolean
   addLifeOrbs: (orbs: number) => void
   spendLifeOrbs: (orbs: number) => boolean
   completeModule: (moduleId: string) => void
   completeChallenge: (challengeId: string) => void
   updateStreak: () => void
   addAchievement: (achievementId: string) => void
+  unlockAvatar: (avatarId: string) => void
+  equipAvatar: (avatarId: string) => void
+  unlockBanner: (bannerId: string) => void
+  equipBanner: (bannerId: string) => void
 }
 
 export const useGameStore = create<GameState>()(
@@ -35,12 +44,25 @@ export const useGameStore = create<GameState>()(
       completedModules: ["climate-basics"],
       completedChallenges: ["plastic-free-week"],
       achievements: ["eco-warrior", "energy-saver", "top-performer"],
+      unlockedAvatars: ["eco-guardian", "tree-keeper", "solar-champion"],
+      equippedAvatar: "eco-guardian",
+      unlockedBanners: ["forest-gradient", "ocean-waves"],
+      equippedBanner: "forest-gradient",
       lastLoginDate: new Date().toDateString(),
 
       addEcoPoints: (points) =>
         set((state) => ({
           ecoPoints: state.ecoPoints + points,
         })),
+
+      spendEcoPoints: (points) => {
+        const state = get()
+        if (state.ecoPoints >= points) {
+          set({ ecoPoints: state.ecoPoints - points })
+          return true
+        }
+        return false
+      },
 
       addLifeOrbs: (orbs) =>
         set((state) => ({
@@ -97,7 +119,7 @@ export const useGameStore = create<GameState>()(
           return {
             currentStreak: newStreak,
             lastLoginDate: today,
-            ecoPoints: state.ecoPoints + 10, // Daily login bonus
+            ecoPoints: state.ecoPoints + 10,
           }
         }),
 
@@ -111,6 +133,30 @@ export const useGameStore = create<GameState>()(
           }
           return state
         }),
+
+      unlockAvatar: (avatarId) =>
+        set((state) => {
+          if (!state.unlockedAvatars.includes(avatarId)) {
+            return {
+              unlockedAvatars: [...state.unlockedAvatars, avatarId],
+            }
+          }
+          return state
+        }),
+
+      equipAvatar: (avatarId) => set({ equippedAvatar: avatarId }),
+
+      unlockBanner: (bannerId) =>
+        set((state) => {
+          if (!state.unlockedBanners.includes(bannerId)) {
+            return {
+              unlockedBanners: [...state.unlockedBanners, bannerId],
+            }
+          }
+          return state
+        }),
+
+      equipBanner: (bannerId) => set({ equippedBanner: bannerId }),
     }),
     {
       name: "ecoground-game-state",

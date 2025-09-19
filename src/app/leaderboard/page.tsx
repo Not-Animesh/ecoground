@@ -1,21 +1,30 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Trophy, Medal, Crown, TrendingUp, Users, Flame, Target, Award, Star, Zap } from "lucide-react"
+import { useGameStore } from "@/components/gamification-store"
 
 export default function LeaderboardPage() {
   const [selectedPeriod, setSelectedPeriod] = useState("weekly")
 
-  const leaderboardData = {
+  // Get the current user's stats from global store
+  const myEcoPoints = useGameStore((s) => s.ecoPoints)
+  const myLifeOrbs = useGameStore((s) => s.lifeOrbs)
+  const myLevel = useGameStore((s) => s.level)
+  const myStreak = useGameStore((s) => s.currentStreak)
+  const myUsername = "Ecowarrior" // You can also get this from auth/user context
+  const myAvatar = "/diverse-students-studying.png"
+
+  // Original leaderboard data (without current user)
+  const leaderboardDataRaw = {
     weekly: [
       {
-        rank: 1,
-        username: "EcoMaster2024",
+        username: "Krishan",
         avatar: "/eco-master-avatar.jpg",
         ecoPoints: 2850,
         lifeOrbs: 67,
@@ -26,8 +35,7 @@ export default function LeaderboardPage() {
         change: "+245",
       },
       {
-        rank: 2,
-        username: "GreenWarrior",
+        username: "Saqib",
         avatar: "/green-warrior-avatar.jpg",
         ecoPoints: 2720,
         lifeOrbs: 63,
@@ -38,8 +46,7 @@ export default function LeaderboardPage() {
         change: "+198",
       },
       {
-        rank: 3,
-        username: "NatureLover",
+        username: "Devashish",
         avatar: "/nature-lover-avatar.jpg",
         ecoPoints: 2650,
         lifeOrbs: 61,
@@ -50,21 +57,7 @@ export default function LeaderboardPage() {
         change: "-12",
       },
       {
-        rank: 4,
-        username: "EcoWarrior",
-        avatar: "/diverse-students-studying.png",
-        ecoPoints: 1250,
-        lifeOrbs: 45,
-        level: 12,
-        streak: 7,
-        badges: ["Beginner", "First Steps"],
-        trend: "up",
-        change: "+89",
-        isCurrentUser: true,
-      },
-      {
-        rank: 5,
-        username: "ClimateHero",
+        username: "Raj",
         avatar: "/climate-hero-avatar.jpg",
         ecoPoints: 2480,
         lifeOrbs: 58,
@@ -76,33 +69,62 @@ export default function LeaderboardPage() {
       },
     ],
     monthly: [
-      // Similar structure with different data
+      // ...
     ],
     allTime: [
-      // Similar structure with different data
+      // ...
     ],
   }
+
+  // Add the current user to leaderboard for current period
+  const leaderboardData = useMemo(() => {
+    // Use a deep copy to avoid mutating raw data
+    const data = [...leaderboardDataRaw[selectedPeriod]]
+    data.push({
+      username: myUsername,
+      avatar: myAvatar,
+      ecoPoints: myEcoPoints,
+      lifeOrbs: myLifeOrbs,
+      level: myLevel,
+      streak: myStreak,
+      badges: ["Beginner", "First Steps"],
+      trend: "up",
+      change: "+89",
+      isCurrentUser: true,
+    })
+    // Sort by ecoPoints descending
+    data.sort((a, b) => b.ecoPoints - a.ecoPoints)
+    // Assign ranks dynamically
+    return data.map((player, idx) => ({
+      ...player,
+      rank: idx + 1,
+    }))
+  }, [selectedPeriod, myEcoPoints, myLifeOrbs, myLevel, myStreak])
+
+  // Find current user's position
+  const myRankObj = leaderboardData.find((p) => p.isCurrentUser)
+  const myRank = myRankObj?.rank ?? leaderboardData.length
 
   const achievements = [
     {
       title: "Top 10 This Week",
       description: "Ranked in the top 10 players this week",
       icon: Trophy,
-      earned: true,
+      earned: myRank <= 10,
       rarity: "rare",
     },
     {
       title: "Streak Master",
       description: "Maintained a 30-day learning streak",
       icon: Flame,
-      earned: false,
+      earned: myStreak >= 30,
       rarity: "epic",
     },
     {
       title: "Point Collector",
       description: "Earned 10,000 total Eco-Points",
       icon: Target,
-      earned: false,
+      earned: myEcoPoints >= 10000,
       rarity: "legendary",
     },
   ]
@@ -193,9 +215,9 @@ export default function LeaderboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {leaderboardData.weekly.map((player) => (
+                  {leaderboardData.map((player) => (
                     <div
-                      key={player.rank}
+                      key={player.username}
                       className={`flex items-center gap-4 p-4 rounded-lg border-2 transition-all duration-300 ${
                         player.isCurrentUser
                           ? "border-primary bg-primary/5 shadow-md"
@@ -265,11 +287,11 @@ export default function LeaderboardPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-muted rounded-lg">
-                    <div className="text-2xl font-game text-primary">4th</div>
+                    <div className="text-2xl font-game text-primary">{myRank}{myRank === 1 ? "st" : myRank === 2 ? "nd" : myRank === 3 ? "rd" : "th"}</div>
                     <div className="text-sm text-muted-foreground">Global Rank</div>
                   </div>
                   <div className="text-center p-3 bg-muted rounded-lg">
-                    <div className="text-2xl font-game text-accent">1,250</div>
+                    <div className="text-2xl font-game text-accent">{myEcoPoints.toLocaleString()}</div>
                     <div className="text-sm text-muted-foreground">Eco-Points</div>
                   </div>
                 </div>
@@ -277,10 +299,27 @@ export default function LeaderboardPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Next Rank</span>
-                    <span>470 points needed</span>
+                    <span>
+                      {myRank > 1
+                        ? `${leaderboardData[myRank - 2].ecoPoints - myEcoPoints + 1} points needed`
+                        : "You're #1!"}
+                    </span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: "72%" }}></div>
+                    <div
+                      className="bg-primary h-2 rounded-full"
+                      style={{
+                        width:
+                          myRank > 1
+                            ? `${Math.min(
+                                100,
+                                (myEcoPoints /
+                                  leaderboardData[myRank - 2].ecoPoints) *
+                                  100
+                              )}%`
+                            : "100%",
+                      }}
+                    ></div>
                   </div>
                 </div>
               </CardContent>

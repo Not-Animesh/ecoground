@@ -1,3 +1,5 @@
+// src/app/profile/page.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -17,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Camera, Edit3, Trophy, Target, Zap, Star, Crown, TreePine, Users, ImageIcon, Check } from "lucide-react";
+import { useGameStore } from "@/components/gamification-store";
 
 type AvatarType = {
   id: string;
@@ -30,53 +33,48 @@ type BannerType = {
   id: string;
   name: string;
   gradient: string;
-  unlocked: boolean;
 };
 
 export default function ProfilePage() {
-  // === Customizable Profile State ===
+  const { ecoPoints, lifeOrbs, currentStreak, globalRank, level, unlockedAvatars, equippedAvatar, unlockedBanners, equippedBanner, equipAvatar, equipBanner } = useGameStore();
+
   const [profile, setProfile] = useState({
     username: "EcoWarrior",
-    avatar: "eco-guardian",
-    banner: "forest-gradient",
     bio: "🌱 Passionate about saving our planet! 🌍",
-    level: 12,
+    level: level,
     rank: "Eco Guardian",
-    position: 47,
-    ecoPoints: 1250,
-    lifeOrbs: 45,
-    streak: 7,
+    position: globalRank,
     modulesCompleted: 23,
     challengesWon: 15,
     treesPlanted: 89,
   });
 
-  // Modal state
   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
-  // === Avatars (emoji or images) ===
   const avatars: AvatarType[] = [
-    { id: "eco-guardian", name: "Eco Guardian", emoji: "🌿", unlocked: true },
-    { id: "tree-keeper", name: "Tree Keeper", emoji: "🌳", unlocked: true },
-    { id: "ocean-protector", name: "Ocean Protector", emoji: "🌊", unlocked: false },
-    { id: "solar-champion", name: "Solar Champion", emoji: "☀️", unlocked: true },
-    { id: "earth-defender", name: "Earth Defender", emoji: "🌍", unlocked: false },
-    { id: "nature-sage", name: "Nature Sage", emoji: "🦉", unlocked: false }
+    { id: "eco-guardian", name: "Eco Guardian", emoji: "🌿", unlocked: unlockedAvatars.includes("eco-guardian") },
+    { id: "tree-keeper", name: "Tree Keeper", emoji: "🌳", unlocked: unlockedAvatars.includes("tree-keeper") },
+    { id: "ocean-protector", name: "Ocean Protector", emoji: "🌊", unlocked: unlockedAvatars.includes("ocean-protector") },
+    { id: "solar-champion", name: "Solar Champion", emoji: "☀️", unlocked: unlockedAvatars.includes("solar-champion") },
+    { id: "earth-defender", name: "Earth Defender", emoji: "🌍", unlocked: unlockedAvatars.includes("earth-defender") },
+    { id: "nature-sage", name: "Nature Sage", emoji: "🦉", unlocked: unlockedAvatars.includes("nature-sage") },
+    { id: "eco-warrior-shop", name: "Eco Warrior", emoji: "🎮", unlocked: unlockedAvatars.includes("eco-warrior-shop"), image: "/i1.png" },
+    { id: "forest-guardian-shop", name: "Forest Guardian", emoji: "🌲", unlocked: unlockedAvatars.includes("forest-guardian-shop"), image: "/i2.png" },
+    { id: "ocean-keeper-shop", name: "Ocean Keeper", emoji: "🌊", unlocked: unlockedAvatars.includes("ocean-keeper-shop"), image: "/i5.jpg" },
+    { id: "solar-champion-shop", name: "Solar Champion", emoji: "☀️", unlocked: unlockedAvatars.includes("solar-champion-shop"), image: "/i4.jpg" },
   ];
 
-  // === Banners ===
   const banners: BannerType[] = [
-    { id: "forest-gradient", name: "Forest Gradient", gradient: "from-emerald-400 via-green-500 to-teal-600", unlocked: true },
-    { id: "ocean-waves", name: "Ocean Waves", gradient: "from-blue-400 via-cyan-500 to-teal-600", unlocked: true },
-    { id: "sunset-mountains", name: "Sunset Mountains", gradient: "from-orange-400 via-red-500 to-pink-600", unlocked: false },
-    { id: "aurora-sky", name: "Aurora Sky", gradient: "from-purple-400 via-pink-500 to-indigo-600", unlocked: false },
-    { id: "tropical-paradise", name: "Tropical Paradise", gradient: "from-yellow-400 via-green-500 to-blue-600", unlocked: false },
+    { id: "forest-gradient", name: "Forest Gradient", gradient: "from-emerald-400 via-green-500 to-teal-600" },
+    { id: "ocean-waves", name: "Ocean Waves", gradient: "from-blue-400 via-cyan-500 to-teal-600" },
+    { id: "sunset-mountains", name: "Sunset Mountains", gradient: "from-orange-400 via-red-500 to-pink-600" },
+    { id: "aurora-sky", name: "Aurora Sky", gradient: "from-purple-400 via-pink-500 to-indigo-600" },
+    { id: "tropical-paradise", name: "Tropical Paradise", gradient: "from-yellow-400 via-green-500 to-blue-600" },
   ];
 
-  // === Helper functions ===
   const getBannerGradient = (bannerId: string) => {
     const banner = banners.find((b) => b.id === bannerId);
-    return banner?.gradient || banners[0].gradient;
+    return banner?.gradient || "from-emerald-400 via-green-500 to-teal-600";
   };
 
   const getAvatarDisplay = (avatarId: string) => {
@@ -94,7 +92,6 @@ export default function ProfilePage() {
     return <span className="text-6xl">{avatar.emoji}</span>;
   };
 
-  // === Achievements ===
   const achievements = [
     { name: "First Steps", description: "Complete your first module", icon: "🌱", unlocked: true },
     { name: "Eco Warrior", description: "Reach level 10", icon: "⚔️", unlocked: true },
@@ -104,7 +101,6 @@ export default function ProfilePage() {
     { name: "Climate Champion", description: "Reach top 10 on leaderboard", icon: "🏆", unlocked: false },
   ];
 
-  // === Activity Log ===
   const activityLog = [
     { action: "Completed Climate Change module", time: "2 hours ago", points: "+50" },
     { action: "Won Weekly Challenge", time: "1 day ago", points: "+100" },
@@ -118,7 +114,7 @@ export default function ProfilePage() {
 
       <main className="flex-1 overflow-auto">
         {/* Profile Banner */}
-        <div className={`h-52 bg-gradient-to-r ${getBannerGradient(profile.banner)} relative`}>
+        <div className={`h-52 bg-gradient-to-r ${getBannerGradient(equippedBanner)} relative`}>
           <div className="absolute inset-0 bg-black/25" />
 
           {/* Banner Change Button */}
@@ -145,22 +141,22 @@ export default function ProfilePage() {
                   <div
                     key={banner.id}
                     className={`relative h-20 rounded-lg bg-gradient-to-r ${banner.gradient} cursor-pointer border-2
-                      ${profile.banner === banner.id ? "border-primary" : "border-transparent"}
-                      ${!banner.unlocked ? "opacity-50" : ""}
+                      ${equippedBanner === banner.id ? "border-primary" : "border-transparent"}
+                      ${!unlockedBanners.includes(banner.id) ? "opacity-50" : ""}
                     `}
                     onClick={() => {
-                      if (banner.unlocked) {
-                        setProfile({ ...profile, banner: banner.id });
+                      if (unlockedBanners.includes(banner.id)) {
+                        equipBanner(banner.id);
                       }
                     }}
                   >
-                    {!banner.unlocked && (
+                    {!unlockedBanners.includes(banner.id) && (
                       <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
                         <span className="text-white text-sm font-medium">🔒 Locked</span>
                       </div>
                     )}
                     <div className="absolute bottom-2 left-2 text-white text-xs font-medium">{banner.name}</div>
-                    {profile.banner === banner.id && <Check className="absolute top-2 right-2 text-white" />}
+                    {equippedBanner === banner.id && <Check className="absolute top-2 right-2 text-white" />}
                   </div>
                 ))}
               </div>
@@ -175,7 +171,7 @@ export default function ProfilePage() {
             <div className="relative">
               <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 p-2 flex items-center justify-center">
                 <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
-                  {getAvatarDisplay(profile.avatar)}
+                  {getAvatarDisplay(equippedAvatar)}
                 </div>
               </div>
 
@@ -198,12 +194,12 @@ export default function ProfilePage() {
                       <div
                         key={avatar.id}
                         className={`relative p-4 rounded-lg border-2 cursor-pointer text-center
-                          ${profile.avatar === avatar.id ? "border-primary bg-primary/10" : "border-border"}
+                          ${equippedAvatar === avatar.id ? "border-primary bg-primary/10" : "border-border"}
                           ${!avatar.unlocked ? "opacity-50" : ""}
                         `}
                         onClick={() => {
                           if (avatar.unlocked) {
-                            setProfile({ ...profile, avatar: avatar.id });
+                            equipAvatar(avatar.id);
                           }
                         }}
                       >
@@ -222,7 +218,7 @@ export default function ProfilePage() {
                             <span className="text-white text-xs">🔒</span>
                           </div>
                         )}
-                        {profile.avatar === avatar.id && <Check className="absolute top-2 right-2 text-primary" />}
+                        {equippedAvatar === avatar.id && <Check className="absolute top-2 right-2 text-primary" />}
                       </div>
                     ))}
                   </div>
@@ -246,11 +242,11 @@ export default function ProfilePage() {
               {/* Quick Stats */}
               <div className="flex space-x-6">
                 <div className="text-center">
-                  <div className="text-2xl font-game text-primary">{profile.ecoPoints}</div>
+                  <div className="text-2xl font-game text-primary">{ecoPoints}</div>
                   <div className="text-xs text-muted-foreground">Eco-Points</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-game text-destructive">{profile.lifeOrbs}</div>
+                  <div className="text-2xl font-game text-destructive">{lifeOrbs}</div>
                   <div className="text-xs text-muted-foreground">Life-Orbs</div>
                 </div>
                 <div className="text-center">
@@ -285,7 +281,7 @@ export default function ProfilePage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-game text-yellow-500">{profile.streak} days</div>
+                    <div className="text-2xl font-game text-yellow-500">{currentStreak} days</div>
                   </CardContent>
                 </Card>
                 <Card>
