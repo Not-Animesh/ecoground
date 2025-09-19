@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+
+enum Role {
+  STUDENT
+  TEACHER
+}
+
+enum ProofStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum PurchaseStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+// Models
+
+model User {
+  id             String      @id @default(uuid())
+  name           String
+  email          String      @unique
+  password       String
+  role           Role        @default(STUDENT)
+  avatar         String?     // URL
+  banner         String?     // URL
+  theme          String?     // Theme id or name
+  ecoPoints      Int         @default(0)
+  lifeOrbs       Int         @default(0)
+  titles         String[]    // Earned titles
+  ranking        Int?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  // Relations
+  studentCourses Course[]    @relation("StudentCourses")
+  taughtCourses  Course[]    @relation("CourseTeacher")
+  modules        Module[]    @relation("UserModules")
+  proofs         Proof[]     @relation("StudentProofs")
+  purchases      Purchase[]
+  reviewedProofs Proof[]     @relation("ReviewedProofs")
+}
+
+model Course {
+  id           String      @id @default(uuid())
+  title        String
+  description  String?
+  teacher      User?       @relation("CourseTeacher", fields: [teacherId], references: [id])
+  teacherId    String?
+  modules      Module[]
+  students     User[]      @relation("StudentCourses")
+  chapters     Chapter[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Module {
+  id           String      @id @default(uuid())
+  title        String
+  description  String?
+  course       Course      @relation(fields: [courseId], references: [id])
+  courseId     String
+  chapters     Chapter[]
+  users        User[]      @relation("UserModules")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Chapter {
+  id           String      @id @default(uuid())
+  title        String
+  description  String?
+  module       Module      @relation(fields: [moduleId], references: [id])
+  moduleId     String
+  course       Course      @relation(fields: [courseId], references: [id])
+  courseId     String
+  videoUrl     String?
+  summary      String?
+  tasks        Task[]
+  quizzes      Quiz[]
+  proofs       Proof[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Task {
+  id           String      @id @default(uuid())
+  chapter      Chapter     @relation(fields: [chapterId], references: [id])
+  chapterId    String
+  description  String
+  createdAt    DateTime    @default(now())
+  proofs       Proof[]
+}
+
+model Quiz {
+  id           String      @id @default(uuid())
+  chapter      Chapter     @relation(fields: [chapterId], references: [id])
+  chapterId    String
+  question     String
+  options      String[]    // Array of options
+  answer       String      // Correct answer
+  createdAt    DateTime    @default(now())
+  // You can add QuizAttempt model if you want to track user attempts
+}
+
+model Proof {
+  id           String        @id @default(uuid())
+  student      User          @relation("StudentProofs", fields: [studentId], references: [id])
+  studentId    String
+  chapter      Chapter       @relation(fields: [chapterId], references: [id])
+  chapterId    String
+  task         Task?         @relation(fields: [taskId], references: [id])
+  taskId       String?
+  fileUrl      String
+  note         String?
+  status       ProofStatus   @default(PENDING)
+  reviewedBy   User?         @relation("ReviewedProofs", fields: [reviewedById], references: [id])
+  reviewedById String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+// Shop System
+
+model ShopItem {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  imageUrl    String?
+  price       Int         // in lifeOrbs or ecoPoints
+  type        String      // avatar, banner, theme, title, ebook, coupon, etc.
+  createdAt   DateTime    @default(now())
+  purchases   Purchase[]
+}
+
+model Purchase {
+  id           String         @id @default(uuid())
+  student      User           @relation(fields: [studentId], references: [id])
+  studentId    String
+  item         ShopItem       @relation(fields: [itemId], references: [id])
+  itemId       String
+  status       PurchaseStatus @default(COMPLETED)
+  createdAt    DateTime       @default(now())
+}

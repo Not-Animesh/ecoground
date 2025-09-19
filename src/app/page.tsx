@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+// import { Button } from "@/components/ui/8bit/button"
 
 export default function LandingPage() {
   // About BioBlitz points
@@ -46,7 +47,11 @@ export default function LandingPage() {
   ];
 
   return (
+
+
+    
     <div className="relative min-h-screen bg-white text-gray-900 font-sans overflow-x-hidden">
+      {/* <Button variant="outline" className="z-100">Button</Button> */}
       {/* Background Blur Effects */}
       <div className="absolute top-[-120px] left-[-120px] w-[350px] h-[350px] bg-green-400 rounded-full blur-[120px] opacity-30 z-0"></div>
       <div className="absolute top-[360px] right-[-100px] w-[300px] h-[300px] bg-blue-400 rounded-full blur-[100px] opacity-30 z-0"></div>
@@ -71,7 +76,7 @@ export default function LandingPage() {
           </li>
         </ul>
         <div>
-          <Link href="/dashboard">
+          <Link href="/login">
             <button className="bg-green-500 text-white font-bold py-2 px-5 rounded-full shadow hover:bg-green-600 transition">
               Log In
             </button>
@@ -98,7 +103,7 @@ export default function LandingPage() {
           <p className="text-lg text-gray-600 max-w-md mb-4">
             Join BioBlitz—where gamified environmental learning meets real-world impact. Learn, play, and grow alongside thousands of eco-warriors committed to making a difference.
           </p>
-          <Link href="/dashboard">
+          <Link href="/login">
             <button className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow hover:bg-blue-600 transition text-lg">
               Get Started &gt;
             </button>
