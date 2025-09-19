@@ -1,11 +1,14 @@
-import NextAuth, { NextAuthOptions, Session, User as NextAuthUser } from "next-auth";
+import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
+import type { JWT } from "next-auth/jwt";
 
-// Define the user type if needed, otherwise use NextAuth types.
-type UserRole = "STUDENT" | "TEACHER";
+// Custom app user type to satisfy type checker
+interface AppUser extends User {
+  role: string
+}
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -18,33 +21,32 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials?.password) return null;
         const user = await prisma.user.findUnique({ where: { email: credentials.email } });
         if (!user) return null;
         const valid = await compare(credentials.password, user.password);
         if (!valid) return null;
+        // Cast as AppUser to satisfy type checker
         return {
           id: user.id,
           name: user.name,
           email: user.email,
-          role: user.role as UserRole,
-        };
+          role: user.role,
+        } as AppUser;
       }
-    })
-    // Add OAuth providers here if needed (Google, etc)
+    }),
   ],
   callbacks: {
-    async jwt({ token, user }: { token: any; user?: any }) {
-      if (user && user.role) {
+    async jwt({ token, user }) {
+      // user is AppUser | undefined
+      if (user && "role" in user && user.role) {
         token.role = user.role;
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: Record<string, unknown> }) {
+    async session({ session, token }) {
       if (token?.role && session.user) {
-        (session.user as NextAuthUser & { role?: UserRole }).role = token.role as UserRole;
+        (session.user as typeof session.user & { role?: string }).role = token.role as string;
       }
       return session;
     }
