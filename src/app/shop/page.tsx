@@ -1,5 +1,3 @@
-// src/app/shop/page.tsx
-
 "use client"
 
 import { useState } from "react";
@@ -207,7 +205,7 @@ export default function ShopPage() {
                   >
                     <CardHeader className="pb-3">
                       <div className="aspect-square bg-muted rounded-lg mb-3 overflow-hidden flex items-center justify-center">
-                        {category.id === 'banners' ? (
+                        {category.id === 'banners' && 'gradient' in item && item.gradient ? (
                           <div className={`w-full h-full bg-gradient-to-r ${item.gradient}`}></div>
                         ) : (
                           <Image
